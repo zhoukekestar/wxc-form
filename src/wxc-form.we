@@ -1,0 +1,261 @@
+<template>
+  <container>
+    <content></content>
+  </container>
+</template>
+
+<script>
+  /*
+   * This Component Based on form-json:
+   *   https://github.com/zhoukekestar/webcomponents/tree/master/components/form-json
+  */
+
+  var serialize = function(list) {
+    var result = [], name, value;
+    for (var i in list) {
+      name = i, value = list[i];
+      value = typeof value === 'string' ? value : JSON.stringify(value);
+      result.push(encodeURIComponent(name) + '=' + encodeURIComponent(value))
+    }
+    return result.join('&')
+  }
+
+  /**
+  * Set obj's value by keys
+  * @param  {[object]}           obj   The target you want to set.
+  * @param  {[array]}            keys  The value's path.
+  * @param  {[string, array...]} value Target's value.
+  * @return {[object]}                 The target after setting value.
+  *
+  * Example: obj = {'a':'a'}, keys = ['b','bb'], value = 'b-value'
+  * return {
+  *         'a': 'a',
+  *         'b': {
+  *           'bb': 'b-value'
+  *          }
+  *        }
+  */
+  var deepSet = function(obj, keys, value) {
+
+    var curKey = keys[0];
+    if(keys.length === 1) {
+
+      curKey === '' ? obj.push(value) : obj[curKey] = value;
+
+      return;
+    }
+    if (keys.length > 1) {
+      if (typeof obj[curKey] === 'undefined')
+        obj[curKey] = keys[1] === '' ? [] : {};
+    }
+
+    var o = obj[curKey];
+    keys.shift();
+    return deepSet(o, keys, value);
+  }
+
+  var integerKeysAsArrayIndexes = function(obj, keys, value) {
+
+    var allKeysIsInteger = true;
+    var arr = [];
+    var temp;
+    keys = keys || [];
+    value = value || obj;
+
+
+
+    for (var key in value) {
+
+      temp = keys.concat();
+
+      if (isNaN(+key)) {
+        allKeysIsInteger = false;
+      } else {
+        arr.push(value[key]);
+      }
+      temp.push(key);
+
+      if ((typeof value[key] === 'object') && !Array.isArray(value[key])) {
+        integerKeysAsArrayIndexes(obj, temp, value[key]);
+      }
+    }
+
+    if (allKeysIsInteger) {
+
+      if (keys.length === 0) {
+        obj = arr;
+      } else {
+        deepSet(obj, keys, arr)
+      }
+    }
+    return obj;
+  }
+
+  var getAllInputs = (function() {
+
+    var inputs = [];
+
+    return function(node, deep) {
+
+      inputs = (deep === undefined) ? [] : inputs;
+
+      // Loop children
+      var children = node.children;
+      for (var i = 0; i < children.length; i++) {
+
+        var attr = children[i].attr || {}
+          , element = children[i]
+          , type = attr.type
+          , name = attr.name
+          , value = attr.value
+
+        // Current node is input filed
+        if (element.type === 'input' || element.type === 'select' || element.type === 'textarea') {
+
+          if (name
+            && !element.disabled
+            && type !== 'submit'
+            && type !== 'button'
+            && type !== 'file'
+            && ((type !== 'radio' && type !== 'checkbox') || element.checked)
+          ) {
+
+            inputs.push({
+              name: name,
+              value: value
+            });
+          }
+
+        // Loop children if it has children
+        } else if (node.children.length > 0) {
+          getAllInputs(node.children[i], true);
+        }
+      }
+      return inputs;
+    }
+
+  })();
+
+  var toJsonObject = function(list, res) {
+
+    list.forEach(function(t) {
+      var keys  = t.name.split('.');
+      var len   = keys.length - 1;
+      var index = keys[len].indexOf(':');
+      var value = t.value;
+      var type;
+      if (index !== -1) {
+        type    = keys[len].substr(index + 1);
+        keys[len] = keys[len].substr(0, index);
+      } else {
+        type = 'string';
+      }
+
+      if (type === 'array' || type === 'object') {
+
+        value  = JSON.parse(value);
+
+      } else if (type === 'number') {
+
+        value = +value;
+      } else if (type === 'datetime') {
+
+        // var value = '2016-05-05 05:05:05';
+        // Not an UTC-time. Convert it to an UTC-time.
+        if (value.indexOf('T') === -1) {
+
+          value = value.replace(' ', 'T');
+          value = new Date(value + 'Z');
+          value = new Date(value.getTime() + value.getTimezoneOffset() * 60 * 1000);
+
+        // var value = '2016-05-05T05:05:05';
+        // An UTC-time, just new it directly.
+        } else {
+          value = new Date(value + 'Z');
+        }
+
+        if (value.toString() === 'Invalid Date') {
+          value = '';
+        } else {
+          value = value.getTime();
+        }
+
+      } else if (type === 'date') {
+
+        value = new Date(value);
+        if (value.toString() === 'Invalid Date') {
+          value = '';
+        } else {
+          value = value.getTime();
+        }
+
+      } else if (type === 'bool' || type === 'boolean') {
+        if (value === 'false')
+          value = false
+        else
+          value = !!value;
+
+      }
+
+      deepSet(res, keys, value);
+    });
+  }
+  var stream = require('@weex-module/stream');
+  module.exports = {
+    data: {
+      action: '',
+      method: 'POST'
+    },
+    created: function() {
+      console.log('wxc-form created');
+      this.$on('submit', function(e) {
+        console.log('got submit');
+        console.log(e);
+      })
+    },
+    methods: {
+      headers: function() {
+        return {};
+      },
+      submit: function(callback, filter) {
+        console.log('submit');
+
+        var res = {};
+        toJsonObject(getAllInputs(this._rootEl), res);
+        integerKeysAsArrayIndexes(res);
+
+        res = typeof filter === 'function' ? filter(res) : res;
+
+        if (res === null) return;
+
+        // GET
+        if (this.method.toUpperCase() === 'GET') {
+          stream.fetch({
+            method: 'GET',
+            url: /\?/.test(this.action) ? this.action + '&' + serialize(res) : this.action + '?' + serialize(res),
+            type: 'json',
+            headers: this.headers()
+          }, function(response) {
+            callback && callback(response);
+          })
+
+        // Others
+        } else {
+          stream.fetch({
+            method: this.method,
+            url: this.action,
+            type:'json',
+            headers: this.headers(),
+            body: JSON.stringify(res)
+          }, function(response) {
+            callback && callback(response)
+          });
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+
+</style>
