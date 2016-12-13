@@ -15,6 +15,7 @@ Function `filter` is optional which can modify the body sent to server, if you r
 * `headers` `function` OR `object`. Function return object will set to current request headers.
 
 # Quick Start
+* [Try it online! 😁](https://zhoukekestar.github.io/wxc-form/public/)
 * `npm install wxc-form --save` Save wxc-form to your project.
 * require it
 ```html
