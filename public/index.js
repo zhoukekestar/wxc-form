@@ -45,9 +45,9 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1)
-	var __weex_template__ = __webpack_require__(73)
-	var __weex_style__ = __webpack_require__(74)
-	var __weex_script__ = __webpack_require__(75)
+	var __weex_template__ = __webpack_require__(75)
+	var __weex_style__ = __webpack_require__(76)
+	var __weex_script__ = __webpack_require__(77)
 
 	__weex_define__('@weex-component/246d90171e9d6ed1f81af7a080f90785', [], function(__weex_require__, __weex_exports__, __weex_module__) {
 
@@ -92,6 +92,9 @@
 
 	module.exports = {
 	  "type": "container",
+	  "classList": [
+	    "wxc-form"
+	  ],
 	  "children": [
 	    {
 	      "type": "content"
@@ -103,7 +106,11 @@
 /* 3 */
 /***/ function(module, exports) {
 
-	module.exports = {}
+	module.exports = {
+	  "wxc-form": {
+	    "textAlign": "center"
+	  }
+	}
 
 /***/ },
 /* 4 */
@@ -115,7 +122,7 @@
 
 	var _typeof3 = _interopRequireDefault(_typeof2);
 
-	var _stringify = __webpack_require__(76);
+	var _stringify = __webpack_require__(73);
 
 	var _stringify2 = _interopRequireDefault(_stringify);
 
@@ -271,25 +278,19 @@
 	    deepSet(res, keys, value);
 	  });
 	};
+
 	var stream = __weex_require__('@weex-module/stream');
 	module.exports = {
 	  data: function () {return {
 	    action: '',
 	    method: 'POST'
 	  }},
-	  created: function created() {
-	    console.log('wxc-form created');
-	    this.$on('submit', function (e) {
-	      console.log('got submit');
-	      console.log(e);
-	    });
-	  },
+	  created: function created() {},
 	  methods: {
 	    headers: function headers() {
 	      return {};
 	    },
 	    submit: function submit(callback, filter) {
-	      console.log('submit');
 
 	      var res = {};
 	      toJsonObject(getAllInputs(this._rootEl), res);
@@ -304,7 +305,7 @@
 	          method: 'GET',
 	          url: /\?/.test(this.action) ? this.action + '&' + serialize(res) : this.action + '?' + serialize(res),
 	          type: 'json',
-	          headers: this.headers()
+	          headers: (0, _typeof3.default)(this.headers) === 'object' ? this.headers : this.headers()
 	        }, function (response) {
 	          callback && callback(response);
 	        });
@@ -313,7 +314,7 @@
 	          method: this.method,
 	          url: this.action,
 	          type: 'json',
-	          headers: this.headers(),
+	          headers: (0, _typeof3.default)(this.headers) === 'object' ? this.headers : this.headers(),
 	          body: (0, _stringify2.default)(res)
 	        }, function (response) {
 	          callback && callback(response);
@@ -1610,6 +1611,22 @@
 
 /***/ },
 /* 73 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(74), __esModule: true };
+
+/***/ },
+/* 74 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var core  = __webpack_require__(16)
+	  , $JSON = core.JSON || (core.JSON = {stringify: JSON.stringify});
+	module.exports = function stringify(it){ // eslint-disable-line no-unused-vars
+	  return $JSON.stringify.apply($JSON, arguments);
+	};
+
+/***/ },
+/* 75 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -1631,7 +1648,7 @@
 	          "attr": {
 	            "type": "text",
 	            "name": "name",
-	            "value": "zkk"
+	            "value": "name"
 	          }
 	        },
 	        {
@@ -1642,7 +1659,7 @@
 	          "attr": {
 	            "type": "email",
 	            "name": "password",
-	            "value": "22xx"
+	            "value": "password"
 	          }
 	        },
 	        {
@@ -1687,6 +1704,9 @@
 	        },
 	        {
 	          "type": "text",
+	          "classList": [
+	            "btn"
+	          ],
 	          "id": "submit",
 	          "events": {
 	            "click": "submit1"
@@ -1713,7 +1733,7 @@
 	          "attr": {
 	            "type": "text",
 	            "name": "name",
-	            "value": "zkk"
+	            "value": "name"
 	          }
 	        },
 	        {
@@ -1724,7 +1744,7 @@
 	          "attr": {
 	            "type": "email",
 	            "name": "password",
-	            "value": "22xx"
+	            "value": "password"
 	          }
 	        },
 	        {
@@ -1769,6 +1789,9 @@
 	        },
 	        {
 	          "type": "text",
+	          "classList": [
+	            "btn"
+	          ],
 	          "id": "submit",
 	          "events": {
 	            "click": "submit2"
@@ -1778,74 +1801,91 @@
 	          }
 	        }
 	      ]
+	    },
+	    {
+	      "type": "text",
+	      "attr": {
+	        "value": function () {return 'response:      ' + (this.response)}
+	      }
 	    }
 	  ]
 	}
 
 /***/ },
-/* 74 */
+/* 76 */
 /***/ function(module, exports) {
 
 	module.exports = {
 	  "input": {
 	    "borderStyle": "solid",
-	    "borderWidth": 1,
-	    "borderColor": "#ff0000"
+	    "borderWidth": 0.694667,
+	    "borderColor": "#e5e5e5",
+	    "margin": 10,
+	    "padding": 10
+	  },
+	  "btn": {
+	    "backgroundColor": "rgb(0,176,255)",
+	    "width": 200,
+	    "textAlign": "center",
+	    "color": "#ffffff",
+	    "padding": 10,
+	    "borderRadius": 5,
+	    "fontSize": 14
 	  }
 	}
 
 /***/ },
-/* 75 */
+/* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(module, exports, __weex_require__){'use strict';
 
+	var _stringify = __webpack_require__(73);
+
+	var _stringify2 = _interopRequireDefault(_stringify);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	__webpack_require__(1);
 	module.exports = {
+	  data: function () {return {
+	    response: ''
+	  }},
 	  created: function created() {
 	    console.log('index.we created');
-	    this.$on('wxc-form', function (d) {
-	      console.log('wxc-form inited.');
-	    });
 	  },
 	  methods: {
 	    submit1: function submit1() {
-	      console.log('submit1');
+
+	      var that = this;
+
 	      this.$vm('form1').submit(function (response) {
 	        console.log(response);
+	        that.response = (0, _stringify2.default)(response, null, 2);
 	      }, function (data) {
 	        data['this-data-added-by-filter-function'] = 'yeah';
 	        return data;
 	      });
 	    },
 	    submit2: function submit2() {
-	      console.log('submit2');
-	      this.$vm('form2').submit(function (response) {
+
+	      var that = this;
+	      var form = this.$vm('form2');
+	      form.headers = function () {
+	        return {
+	          'x-client-id': Math.random()
+	        };
+	      };
+
+	      form.submit(function (response) {
 	        console.log(response);
-	      }, function (data) {
-	        return data;
+	        that.response = (0, _stringify2.default)(response, null, 2);;
 	      });
 	    }
 	  }
 	};}
 	/* generated by weex-loader */
 
-
-/***/ },
-/* 76 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = { "default": __webpack_require__(77), __esModule: true };
-
-/***/ },
-/* 77 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var core  = __webpack_require__(16)
-	  , $JSON = core.JSON || (core.JSON = {stringify: JSON.stringify});
-	module.exports = function stringify(it){ // eslint-disable-line no-unused-vars
-	  return $JSON.stringify.apply($JSON, arguments);
-	};
 
 /***/ }
 /******/ ]);

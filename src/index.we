@@ -1,54 +1,67 @@
 <template>
   <div>
     <wxc-form id='form1' action='//dev-common.toomao.com/empty' method='GET'>
-      <input class='input' type="text" name="name" value="zkk">
-      <input class='input' type="email" name="password" value="22xx">
+      <input class='input' type="text" name="name" value="name">
+      <input class='input' type="email" name="password" value="password">
       <input class='input' name="a.b" value="a.b">
       <input class='input' name="a.c" value="a.c">
 
       <input class='input' name="b.0" value="b.0">
       <input class='input' name="b.1" value="b.1">
-      <text id='submit' onclick='submit1'>submit</text>
+      <text class='btn' id='submit' onclick='submit1'>submit</text>
     </wxc-form>
     <wxc-form id='form2' action='//dev-common.toomao.com/empty' method='POST'>
-      <input class='input' type="text" name="name" value="zkk">
-      <input class='input' type="email" name="password" value="22xx">
+      <input class='input' type="text" name="name" value="name">
+      <input class='input' type="email" name="password" value="password">
       <input class='input' name="a.b" value="a.b">
       <input class='input' name="a.c" value="a.c">
 
       <input class='input' name="b.0" value="b.0">
       <input class='input' name="b.1" value="b.1">
-      <text id='submit' onclick='submit2'>submit</text>
+      <text class='btn' id='submit' onclick='submit2'>submit</text>
     </wxc-form>
-
+    <text>
+      response:
+      {{response}}
+    </text>
   </div>
 </template>
 
 <script>
   require('./wxc-form.we');
   module.exports = {
+    data: {
+      response: ''
+    },
     created: function() {
       console.log('index.we created')
-      this.$on('wxc-form', function(d) {
-        console.log('wxc-form inited.');
-      })
     },
     methods: {
       submit1: function() {
-        console.log('submit1')
+
+        var that = this;
+
         this.$vm('form1').submit(function(response) {
           console.log(response)
+          that.response = JSON.stringify(response, null, 2);
         }, function(data) {
           data['this-data-added-by-filter-function'] = 'yeah'
           return data;
         });
       },
       submit2: function() {
-        console.log('submit2')
-        this.$vm('form2').submit(function(response) {
+
+        var that = this;
+        var form = this.$vm('form2');
+        form.headers = function() {
+          return {
+            'x-client-id': Math.random()
+          }
+        }
+        // form.headers = {'x-client-id': 'aaa'}
+        form.submit(function(response) {
           console.log(response)
-        }, function(data) {
-          return data;
+          that.response = JSON.stringify(response, null, 2);;
         });
       }
     }
@@ -58,7 +71,18 @@
 <style>
   .input {
     border-style: solid;
-    border-width: 1px;
-    border-color: #ff0000;
+    border-width: 0.694667px;
+    border-color: #e5e5e5;
+    margin: 10px;
+    padding: 10px;
+  }
+  .btn {
+    background-color: rgb(0, 176, 255);
+    width: 200;
+    text-align: center;
+    color: #fff;
+    padding: 10;
+    border-radius: 5;
+    font-size: 14;
   }
 </style>

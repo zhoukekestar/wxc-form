@@ -70,6 +70,9 @@
 
 	module.exports = {
 	  "type": "container",
+	  "classList": [
+	    "wxc-form"
+	  ],
 	  "children": [
 	    {
 	      "type": "content"
@@ -81,7 +84,11 @@
 /* 3 */
 /***/ function(module, exports) {
 
-	module.exports = {}
+	module.exports = {
+	  "wxc-form": {
+	    "textAlign": "center"
+	  }
+	}
 
 /***/ },
 /* 4 */
@@ -93,7 +100,7 @@
 
 	var _typeof3 = _interopRequireDefault(_typeof2);
 
-	var _stringify = __webpack_require__(76);
+	var _stringify = __webpack_require__(73);
 
 	var _stringify2 = _interopRequireDefault(_stringify);
 
@@ -249,25 +256,19 @@
 	    deepSet(res, keys, value);
 	  });
 	};
+
 	var stream = __weex_require__('@weex-module/stream');
 	module.exports = {
 	  data: function () {return {
 	    action: '',
 	    method: 'POST'
 	  }},
-	  created: function created() {
-	    console.log('wxc-form created');
-	    this.$on('submit', function (e) {
-	      console.log('got submit');
-	      console.log(e);
-	    });
-	  },
+	  created: function created() {},
 	  methods: {
 	    headers: function headers() {
 	      return {};
 	    },
 	    submit: function submit(callback, filter) {
-	      console.log('submit');
 
 	      var res = {};
 	      toJsonObject(getAllInputs(this._rootEl), res);
@@ -282,7 +283,7 @@
 	          method: 'GET',
 	          url: /\?/.test(this.action) ? this.action + '&' + serialize(res) : this.action + '?' + serialize(res),
 	          type: 'json',
-	          headers: this.headers()
+	          headers: (0, _typeof3.default)(this.headers) === 'object' ? this.headers : this.headers()
 	        }, function (response) {
 	          callback && callback(response);
 	        });
@@ -291,7 +292,7 @@
 	          method: this.method,
 	          url: this.action,
 	          type: 'json',
-	          headers: this.headers(),
+	          headers: (0, _typeof3.default)(this.headers) === 'object' ? this.headers : this.headers(),
 	          body: (0, _stringify2.default)(res)
 	        }, function (response) {
 	          callback && callback(response);
@@ -1587,16 +1588,13 @@
 	__webpack_require__(61)('observable');
 
 /***/ },
-/* 73 */,
-/* 74 */,
-/* 75 */,
-/* 76 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(77), __esModule: true };
+	module.exports = { "default": __webpack_require__(74), __esModule: true };
 
 /***/ },
-/* 77 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var core  = __webpack_require__(16)

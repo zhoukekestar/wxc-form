@@ -1,5 +1,5 @@
 <template>
-  <container>
+  <container class="wxc-form">
     <content></content>
   </container>
 </template>
@@ -200,6 +200,7 @@
       deepSet(res, keys, value);
     });
   }
+  
   var stream = require('@weex-module/stream');
   module.exports = {
     data: {
@@ -207,18 +208,13 @@
       method: 'POST'
     },
     created: function() {
-      console.log('wxc-form created');
-      this.$on('submit', function(e) {
-        console.log('got submit');
-        console.log(e);
-      })
+
     },
     methods: {
       headers: function() {
         return {};
       },
       submit: function(callback, filter) {
-        console.log('submit');
 
         var res = {};
         toJsonObject(getAllInputs(this._rootEl), res);
@@ -234,7 +230,7 @@
             method: 'GET',
             url: /\?/.test(this.action) ? this.action + '&' + serialize(res) : this.action + '?' + serialize(res),
             type: 'json',
-            headers: this.headers()
+            headers: typeof this.headers === 'object' ? this.headers : this.headers()
           }, function(response) {
             callback && callback(response);
           })
@@ -245,7 +241,7 @@
             method: this.method,
             url: this.action,
             type:'json',
-            headers: this.headers(),
+            headers: typeof this.headers === 'object' ? this.headers : this.headers(),
             body: JSON.stringify(res)
           }, function(response) {
             callback && callback(response)
@@ -257,5 +253,7 @@
 </script>
 
 <style>
-
+  .wxc-form {
+    text-align: center;
+  }
 </style>
