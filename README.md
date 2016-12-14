@@ -84,7 +84,7 @@ Weex Component Form.
 
 ## Input Attributes
 | Attribute | Message Property | Default Message | Detail |
-| -- | -- | -- |
+| --- | --- | --- |
 | `type="email"` | `email` | 邮箱地址错误 | Check the value is email or not. |
 | `type="number"`| `number` | 数字格式错误 | Check the value is number or not. |
 | `type="cellphone tel phone"` |`cellphone` | 手机号错误 | The type can be one of `cellphone`, `tel`, `phone`. Check the value is phone number or not. |
