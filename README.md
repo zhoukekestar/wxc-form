@@ -100,7 +100,7 @@ Weex Component Form.
 ## Demo
 ```html
 <template>
-  <wxc-form id='form3' action='//dev-common.toomao.com/empty' method='POST'>
+  <wxc-form id='form3' action='/action' method='POST'>
     <input type="email" name="email" value="" placeholder="email" required>
     <input type="password" name="password" value="" minlength='6' maxlength="20" required msg='{"minlength": "Password is too short", "required": "oh! you forget your password"}'>
     <text class='btn' id='submit' onclick='submit'>submit</text>
