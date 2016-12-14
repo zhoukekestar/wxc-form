@@ -216,6 +216,7 @@
 	        if (name && !element.disabled && type !== 'submit' && type !== 'button' && type !== 'file' && (type !== 'radio' && type !== 'checkbox' || element.checked)) {
 
 	          if (novalidate === false) {
+
 	            var msg = validator.validIt(children[i]);
 	            if (msg) {
 	              return msg;
@@ -298,7 +299,7 @@
 	  created: function created() {},
 	  methods: {
 	    toast: function toast(msg) {
-	      modal.toast(msg);
+	      modal.toast({ message: msg, duration: 1 });
 	    },
 	    headers: function headers() {
 	      return {};
@@ -1777,7 +1778,7 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-	  "type": "div",
+	  "type": "scroller",
 	  "children": [
 	    {
 	      "type": "wxc-form",
@@ -2208,6 +2209,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	__webpack_require__(1);
+	var modal = __weex_require__('@weex-module/modal');
 	module.exports = {
 	  data: function () {return {
 	    response: ''
@@ -2245,11 +2247,15 @@
 	      });
 	    },
 	    submit3: function submit3() {
+
 	      var that = this,
 	          form = this.$vm('form3');
 
 	      form.toast = function (msg) {
-	        alert(msg);
+	        modal.alert({
+	          message: msg,
+	          okTitle: 'OK'
+	        }, function () {});
 	      };
 
 	      this.$vm('form3').submit(function (response) {

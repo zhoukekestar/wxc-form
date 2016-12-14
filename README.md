@@ -17,7 +17,13 @@ Weex Component Form.
 * `toast()` Show message function. Default: `modal.toast(msg)`.
 
 # Quick Start
-* [Try it online! 😁](https://zhoukekestar.github.io/wxc-form/public/)
+
+## Try it 😁
+* [Try it online!](https://zhoukekestar.github.io/wxc-form/public/)
+* Try it on playground.
+  ![qr.png](./public/qr.png)
+
+# Steps
 * `npm install wxc-form --save` Save wxc-form to your project.
 * require it
 ```html

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <scroller>
     <wxc-form id='form1' action='//dev-common.toomao.com/empty' method='GET' novalidate>
       <input class='input' oninput='oninput' type="text" name="name" value="name">
       <input class='input' oninput='oninput' type="password" name="password" value="pass" minlength='6'>
@@ -38,17 +38,19 @@
       response:
       {{response}}
     </text>
-  </div>
+  </scroller>
 </template>
 
 <script>
   require('./wxc-form.we');
+  var modal = require('@weex-module/modal');
   module.exports = {
     data: {
       response: ''
     },
     created: function() {
       console.log('index.we created')
+
     },
     methods: {
       oninput: function(e) {
@@ -67,6 +69,8 @@
       },
       submit2: function() {
 
+
+
         var that = this;
         var form = this.$vm('form2');
         form.headers = function() {
@@ -81,11 +85,17 @@
         });
       },
       submit3: function() {
+
         var that = this
           , form = this.$vm('form3');
 
         form.toast = function(msg) {
-          alert(msg)
+          modal.alert({
+            message: msg,
+            okTitle: 'OK'
+          }, function() {
+
+          })
         }
 
         this.$vm('form3').submit(function(response) {

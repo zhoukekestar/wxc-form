@@ -194,6 +194,7 @@
 	        if (name && !element.disabled && type !== 'submit' && type !== 'button' && type !== 'file' && (type !== 'radio' && type !== 'checkbox' || element.checked)) {
 
 	          if (novalidate === false) {
+
 	            var msg = validator.validIt(children[i]);
 	            if (msg) {
 	              return msg;
@@ -276,7 +277,7 @@
 	  created: function created() {},
 	  methods: {
 	    toast: function toast(msg) {
-	      modal.toast(msg);
+	      modal.toast({ message: msg, duration: 1 });
 	    },
 	    headers: function headers() {
 	      return {};

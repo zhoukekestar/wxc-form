@@ -121,6 +121,7 @@
           ) {
 
             if (novalidate === false) {
+
               var msg = validator.validIt(children[i]);
               if (msg) {
                 return msg;
@@ -221,7 +222,7 @@
     },
     methods: {
       toast: function(msg) {
-        modal.toast(msg);
+        modal.toast({message: msg, duration: 1});
       },
       headers: function() {
         return {};
