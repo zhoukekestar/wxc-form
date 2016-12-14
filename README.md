@@ -83,17 +83,19 @@ Weex Component Form.
 * `toast` you can override the toast function. Default toast: `modal.toast(msg)`
 
 ## Input Attributes
-* `type="email"` Check the value is email or not, default message: '邮箱地址错误', msg property is `email`.
-* `type="number"` Check the value is number or not, default message: '数字格式错误', msg property is `number`.
-* `type="cellphone|tel|phone"` The type can be one of `cellphone`, `tel`, `phone`. Check the value is phone number or not, default message: '手机号错误', msg property is `cellphone`.
-* `type="integer"` Check the value is integer or not, default message: '请输入整数', msg property is `integer`.
-* `type="url"` Check the value is integer or not, default message: '请输入整数', msg property is `integer`.
-* `type="date"` Check the value is date or not, default message: '日期错误', msg property is `date`.
-* `required` Check the value is empty or not, default message: '必须填写', msg property is `required`.
-* `pattern` Check the value is match current pattern or not, default message: '请输入正确的值', msg property is `pattern`.
-* `minlength` Check the value's length is less than current min-length or not, default message: '最小长度为{num}', msg property is `minlength`.
-* `maxlength` Check the value's length is greater than current max-length or not, default message: '最大长度为{num}', msg property is `maxlength`.
-* `msg` A JSON Object that can be specify the invalid message.
+|Attribute|Message <br>Property|Default <br>Message|Detail|
+|--|--|--|
+|`type="email"`| `email` | 邮箱地址错误 | Check the value is email or not.|
+|`type="number"`| `number` | 数字格式错误 | Check the value is number or not.|
+|`type="cellphone tel phone"` |`cellphone` | 手机号错误| The type can be one of `cellphone`, `tel`, `phone`. Check the value is phone number or not.|
+|`type="integer"` |`integer`|请输入整数 | Check the value is integer or not.|
+|`type="url"` | `url` |请输入正确的网址 | Check the value is url or not.|
+|`type="date"`|`date` |日期错误 | Check the value is date or not.|
+|`required` |`required` |必须填写 | Check the value is empty or not.|
+|`pattern` | `pattern`|请输入正确的值 | Check the value is match current pattern or not. Demo: `<input patter="abc">`, you have to input "abc" to match it. |
+|`minlength` | `minlength`| 最小长度为{num}| Check the value's length is less than current min-length or not. The `{num}` is your specified value.|
+|`maxlength` |`maxlength` | 最大长度为{num}| Check the value's length is greater than current max-length or not.  The `{num}` is your specified value.|
+|`msg` | \ | \ | A JSON Object that can be specify the invalid message.|
 
 ## Demo
 ```html
