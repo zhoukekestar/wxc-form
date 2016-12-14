@@ -4,13 +4,14 @@ Weex Component Form.
 # Attributes
 * `method` The method you want to use, possible values: `GET`, `POST`, `DELETE`, `PUT`, default: `POST`
 * `action` The url you want to take action.
+* `novalidate` Disable the validator that can validate input value is valid or not.
 
 # Methods
 * `submit(callback, [filter])`
 
-Function `callback` will pass a parameter `response`.
+  Function `callback` will pass a parameter `response`.
 
-Function `filter` is optional which can modify the body sent to server, if you return `null`, the current request will be canceled.
+  Function `filter` is optional which can modify the body sent to server, if you return `null`, the current request will be canceled.
 
 * `headers()` `function` OR `object`. Function return object will set to current request headers.
 * `toast()` Show message function. Default: `modal.toast(msg)`.

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <wxc-form id='form1' action='//dev-common.toomao.com/empty' method='GET'>
+    <wxc-form id='form1' action='//dev-common.toomao.com/empty' method='GET' novalidate>
       <input class='input' oninput='oninput' type="text" name="name" value="name">
-      <input class='input' oninput='oninput' type="password" name="password" value="password">
+      <input class='input' oninput='oninput' type="password" name="password" value="pass" minlength='6'>
       <input class='input' oninput='oninput' name="a.b" value="a.b">
       <input class='input' oninput='oninput' name="a.c" value="a.c">
 

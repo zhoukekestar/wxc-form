@@ -106,7 +106,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var validator = __webpack_require__(79);
+	var validator = __webpack_require__(75);
 	var serialize = function serialize(list) {
 	  var result = [],
 	      name,
@@ -176,7 +176,7 @@
 
 	  var inputs = [];
 
-	  return function (node, deep) {
+	  return function (node, novalidate, deep) {
 
 	    inputs = deep === undefined ? [] : inputs;
 
@@ -193,9 +193,11 @@
 
 	        if (name && !element.disabled && type !== 'submit' && type !== 'button' && type !== 'file' && (type !== 'radio' && type !== 'checkbox' || element.checked)) {
 
-	          var msg = validator.validIt(children[i]);
-	          if (msg) {
-	            return msg;
+	          if (novalidate === false) {
+	            var msg = validator.validIt(children[i]);
+	            if (msg) {
+	              return msg;
+	            }
 	          }
 
 	          inputs.push({
@@ -204,7 +206,7 @@
 	          });
 	        }
 	      } else if (node.children.length > 0) {
-	        getAllInputs(node.children[i], true);
+	        getAllInputs(node.children[i], novalidate, true);
 	      }
 	    }
 	    return inputs;
@@ -268,7 +270,8 @@
 	module.exports = {
 	  data: function () {return {
 	    action: '',
-	    method: 'POST'
+	    method: 'POST',
+	    novalidate: false
 	  }},
 	  created: function created() {},
 	  methods: {
@@ -283,7 +286,7 @@
 	      var res = {},
 	          inputs;
 
-	      inputs = getAllInputs(this._rootEl);
+	      inputs = getAllInputs(this._rootEl, this.novalidate);
 	      if (typeof inputs === 'string') {
 	        this.toast(inputs);
 	        return;
@@ -1621,11 +1624,7 @@
 	};
 
 /***/ },
-/* 75 */,
-/* 76 */,
-/* 77 */,
-/* 78 */,
-/* 79 */
+/* 75 */
 /***/ function(module, exports) {
 
 	
@@ -1684,7 +1683,7 @@
 	    if (ele.attr.value.length >= l) {
 	      return "";
 	    } else {
-	      return msg.minlength.replace("{1}", l);
+	      return msg.minlength.replace("{num}", l);
 	    }
 	  },
 	  maxlength: function(ele, msg) {
@@ -1695,7 +1694,7 @@
 	    if (ele.attr.value.length <= l) {
 	      return "";
 	    } else {
-	      return msg.maxlength.replace("{1}", l)
+	      return msg.maxlength.replace("{num}", l)
 	    }
 	  },
 	  defaultMsg: {
@@ -1708,8 +1707,8 @@
 	    required: "必须填写",
 	    pattern: "请输入正确的值",
 	    fun: "请输入正确的值",
-	    minlength: "最小长度为{1}",
-	    maxlength: "最大长度为{1}"
+	    minlength: "最小长度为{num}",
+	    maxlength: "最大长度为{num}"
 	  }
 	}
 

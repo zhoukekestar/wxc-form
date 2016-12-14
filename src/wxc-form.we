@@ -95,7 +95,7 @@
 
     var inputs = [];
 
-    return function(node, deep) {
+    return function(node, novalidate, deep) {
 
       inputs = (deep === undefined) ? [] : inputs;
 
@@ -120,9 +120,11 @@
             && ((type !== 'radio' && type !== 'checkbox') || element.checked)
           ) {
 
-            var msg = validator.validIt(children[i]);
-            if (msg) {
-              return msg;
+            if (novalidate === false) {
+              var msg = validator.validIt(children[i]);
+              if (msg) {
+                return msg;
+              }
             }
 
             inputs.push({
@@ -133,7 +135,7 @@
 
         // Loop children if it has children
         } else if (node.children.length > 0) {
-          getAllInputs(node.children[i], true);
+          getAllInputs(node.children[i], novalidate, true);
         }
       }
       return inputs;
@@ -211,7 +213,8 @@
   module.exports = {
     data: {
       action: '',
-      method: 'POST'
+      method: 'POST',
+      novalidate: false
     },
     created: function() {
 
@@ -228,7 +231,7 @@
         var res = {}
           , inputs;
 
-        inputs = getAllInputs(this._rootEl);
+        inputs = getAllInputs(this._rootEl, this.novalidate);
         if (typeof inputs === 'string') {
           this.toast(inputs)
           return;
