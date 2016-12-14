@@ -83,7 +83,7 @@ Weex Component Form.
 * `toast` you can override the toast function. Default toast: `modal.toast(msg)`
 
 ## Input Attributes
-|Attribute|Message <br>Property|Default <br>Message|Detail|
+|Attribute|Message Property|Default Message|Detail|
 |--|--|--|
 |`type="email"`| `email` | 邮箱地址错误 | Check the value is email or not.|
 |`type="number"`| `number` | 数字格式错误 | Check the value is number or not.|
