@@ -1,24 +1,38 @@
 <template>
   <div>
     <wxc-form id='form1' action='//dev-common.toomao.com/empty' method='GET'>
-      <input class='input' type="text" name="name" value="name">
-      <input class='input' type="email" name="password" value="password">
-      <input class='input' name="a.b" value="a.b">
-      <input class='input' name="a.c" value="a.c">
+      <input class='input' oninput='oninput' type="text" name="name" value="name">
+      <input class='input' oninput='oninput' type="password" name="password" value="password">
+      <input class='input' oninput='oninput' name="a.b" value="a.b">
+      <input class='input' oninput='oninput' name="a.c" value="a.c">
 
-      <input class='input' name="b.0" value="b.0">
-      <input class='input' name="b.1" value="b.1">
+      <input class='input' oninput='oninput' name="b.0" value="b.0">
+      <input class='input' oninput='oninput' name="b.1" value="b.1">
       <text class='btn' id='submit' onclick='submit1'>submit</text>
     </wxc-form>
     <wxc-form id='form2' action='//dev-common.toomao.com/empty' method='POST'>
-      <input class='input' type="text" name="name" value="name">
-      <input class='input' type="email" name="password" value="password">
-      <input class='input' name="a.b" value="a.b">
-      <input class='input' name="a.c" value="a.c">
+      <input class='input' oninput='oninput' type="text" name="name" value="name">
+      <input class='input' oninput='oninput' type="password" name="password" value="password" minlength='6'>
+      <input class='input' oninput='oninput' name="a.b" value="a.b">
+      <input class='input' oninput='oninput' name="a.c" value="a.c">
 
-      <input class='input' name="b.0" value="b.0">
-      <input class='input' name="b.1" value="b.1">
+      <input class='input' oninput='oninput' name="b.0" value="b.0">
+      <input class='input' oninput='oninput' name="b.1" value="b.1">
       <text class='btn' id='submit' onclick='submit2'>submit</text>
+    </wxc-form>
+
+    <wxc-form id='form3' action='//dev-common.toomao.com/empty' method='POST'>
+      <input class='input' oninput='oninput' type="text" name="novalidate" value="" placeholder='novalidate'>
+      <input class='input' oninput='oninput' type="number" name="number" value="" placeholder='number'>
+      <input class='input' oninput='oninput' type="email" name="email" value="" placeholder="email">
+      <input class='input' oninput='oninput' type="tel" name="tel" value="" placeholder='tel'>
+      <input class='input' oninput='oninput' type="url" name="url" value="" placeholder='url'>
+      <input class='input' oninput='oninput' type="text" name="required" value="" required placeholder='required'>
+      <input class='input' oninput='oninput' name="minlength" value="" minlength='5' placeholder='minlength'>
+      <input class='input' oninput='oninput' name="maxlength" value="" maxlength='5' placeholder='maxlength'>
+      <input class='input' oninput='oninput' name="pattern" value="" pattern='abc' placeholder='pattern'>
+      <input class='input' oninput='oninput' name="msg" required minlength='6' msg='{"required": "亲，您还没写哦", "minlength": "写得太短了吧~"}'  placeholder='msg'>
+      <text class='btn' id='submit' onclick='submit3'>submit</text>
     </wxc-form>
     <text>
       response:
@@ -37,6 +51,8 @@
       console.log('index.we created')
     },
     methods: {
+      oninput: function(e) {
+      },
       submit1: function() {
 
         var that = this;
@@ -60,6 +76,19 @@
         }
         // form.headers = {'x-client-id': 'aaa'}
         form.submit(function(response) {
+          console.log(response)
+          that.response = JSON.stringify(response, null, 2);;
+        });
+      },
+      submit3: function() {
+        var that = this
+          , form = this.$vm('form3');
+
+        form.toast = function(msg) {
+          alert(msg)
+        }
+
+        this.$vm('form3').submit(function(response) {
           console.log(response)
           that.response = JSON.stringify(response, null, 2);;
         });

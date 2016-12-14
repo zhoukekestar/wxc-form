@@ -9,7 +9,7 @@
    * This Component Based on form-json:
    *   https://github.com/zhoukekestar/webcomponents/tree/master/components/form-json
   */
-
+  var validator = require('./validator.js');
   var serialize = function(list) {
     var result = [], name, value;
     for (var i in list) {
@@ -120,6 +120,11 @@
             && ((type !== 'radio' && type !== 'checkbox') || element.checked)
           ) {
 
+            var msg = validator.validIt(children[i]);
+            if (msg) {
+              return msg;
+            }
+
             inputs.push({
               name: name,
               value: value
@@ -200,8 +205,9 @@
       deepSet(res, keys, value);
     });
   }
-  
-  var stream = require('@weex-module/stream');
+
+  var stream = require('@weex-module/stream')
+    , modal = require('@weex-module/modal');
   module.exports = {
     data: {
       action: '',
@@ -211,13 +217,23 @@
 
     },
     methods: {
+      toast: function(msg) {
+        modal.toast(msg);
+      },
       headers: function() {
         return {};
       },
       submit: function(callback, filter) {
 
-        var res = {};
-        toJsonObject(getAllInputs(this._rootEl), res);
+        var res = {}
+          , inputs;
+
+        inputs = getAllInputs(this._rootEl);
+        if (typeof inputs === 'string') {
+          this.toast(inputs)
+          return;
+        }
+        toJsonObject(inputs, res);
         integerKeysAsArrayIndexes(res);
 
         res = typeof filter === 'function' ? filter(res) : res;

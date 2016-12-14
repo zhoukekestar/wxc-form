@@ -128,6 +128,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	var validator = __webpack_require__(79);
 	var serialize = function serialize(list) {
 	  var result = [],
 	      name,
@@ -214,6 +215,11 @@
 
 	        if (name && !element.disabled && type !== 'submit' && type !== 'button' && type !== 'file' && (type !== 'radio' && type !== 'checkbox' || element.checked)) {
 
+	          var msg = validator.validIt(children[i]);
+	          if (msg) {
+	            return msg;
+	          }
+
 	          inputs.push({
 	            name: name,
 	            value: value
@@ -279,7 +285,8 @@
 	  });
 	};
 
-	var stream = __weex_require__('@weex-module/stream');
+	var stream = __weex_require__('@weex-module/stream'),
+	    modal = __weex_require__('@weex-module/modal');
 	module.exports = {
 	  data: function () {return {
 	    action: '',
@@ -287,13 +294,23 @@
 	  }},
 	  created: function created() {},
 	  methods: {
+	    toast: function toast(msg) {
+	      modal.toast(msg);
+	    },
 	    headers: function headers() {
 	      return {};
 	    },
 	    submit: function submit(callback, filter) {
 
-	      var res = {};
-	      toJsonObject(getAllInputs(this._rootEl), res);
+	      var res = {},
+	          inputs;
+
+	      inputs = getAllInputs(this._rootEl);
+	      if (typeof inputs === 'string') {
+	        this.toast(inputs);
+	        return;
+	      }
+	      toJsonObject(inputs, res);
 	      integerKeysAsArrayIndexes(res);
 
 	      res = typeof filter === 'function' ? filter(res) : res;
@@ -1645,6 +1662,9 @@
 	          "classList": [
 	            "input"
 	          ],
+	          "events": {
+	            "input": "oninput"
+	          },
 	          "attr": {
 	            "type": "text",
 	            "name": "name",
@@ -1656,8 +1676,11 @@
 	          "classList": [
 	            "input"
 	          ],
+	          "events": {
+	            "input": "oninput"
+	          },
 	          "attr": {
-	            "type": "email",
+	            "type": "password",
 	            "name": "password",
 	            "value": "password"
 	          }
@@ -1667,6 +1690,9 @@
 	          "classList": [
 	            "input"
 	          ],
+	          "events": {
+	            "input": "oninput"
+	          },
 	          "attr": {
 	            "name": "a.b",
 	            "value": "a.b"
@@ -1677,6 +1703,9 @@
 	          "classList": [
 	            "input"
 	          ],
+	          "events": {
+	            "input": "oninput"
+	          },
 	          "attr": {
 	            "name": "a.c",
 	            "value": "a.c"
@@ -1687,6 +1716,9 @@
 	          "classList": [
 	            "input"
 	          ],
+	          "events": {
+	            "input": "oninput"
+	          },
 	          "attr": {
 	            "name": "b.0",
 	            "value": "b.0"
@@ -1697,6 +1729,9 @@
 	          "classList": [
 	            "input"
 	          ],
+	          "events": {
+	            "input": "oninput"
+	          },
 	          "attr": {
 	            "name": "b.1",
 	            "value": "b.1"
@@ -1730,6 +1765,9 @@
 	          "classList": [
 	            "input"
 	          ],
+	          "events": {
+	            "input": "oninput"
+	          },
 	          "attr": {
 	            "type": "text",
 	            "name": "name",
@@ -1741,10 +1779,14 @@
 	          "classList": [
 	            "input"
 	          ],
+	          "events": {
+	            "input": "oninput"
+	          },
 	          "attr": {
-	            "type": "email",
+	            "type": "password",
 	            "name": "password",
-	            "value": "password"
+	            "value": "password",
+	            "minlength": "6"
 	          }
 	        },
 	        {
@@ -1752,6 +1794,9 @@
 	          "classList": [
 	            "input"
 	          ],
+	          "events": {
+	            "input": "oninput"
+	          },
 	          "attr": {
 	            "name": "a.b",
 	            "value": "a.b"
@@ -1762,6 +1807,9 @@
 	          "classList": [
 	            "input"
 	          ],
+	          "events": {
+	            "input": "oninput"
+	          },
 	          "attr": {
 	            "name": "a.c",
 	            "value": "a.c"
@@ -1772,6 +1820,9 @@
 	          "classList": [
 	            "input"
 	          ],
+	          "events": {
+	            "input": "oninput"
+	          },
 	          "attr": {
 	            "name": "b.0",
 	            "value": "b.0"
@@ -1782,6 +1833,9 @@
 	          "classList": [
 	            "input"
 	          ],
+	          "events": {
+	            "input": "oninput"
+	          },
 	          "attr": {
 	            "name": "b.1",
 	            "value": "b.1"
@@ -1795,6 +1849,181 @@
 	          "id": "submit",
 	          "events": {
 	            "click": "submit2"
+	          },
+	          "attr": {
+	            "value": "submit"
+	          }
+	        }
+	      ]
+	    },
+	    {
+	      "type": "wxc-form",
+	      "id": "form3",
+	      "attr": {
+	        "action": "//dev-common.toomao.com/empty",
+	        "method": "POST"
+	      },
+	      "children": [
+	        {
+	          "type": "input",
+	          "classList": [
+	            "input"
+	          ],
+	          "events": {
+	            "input": "oninput"
+	          },
+	          "attr": {
+	            "type": "text",
+	            "name": "novalidate",
+	            "value": "",
+	            "placeholder": "novalidate"
+	          }
+	        },
+	        {
+	          "type": "input",
+	          "classList": [
+	            "input"
+	          ],
+	          "events": {
+	            "input": "oninput"
+	          },
+	          "attr": {
+	            "type": "number",
+	            "name": "number",
+	            "value": "",
+	            "placeholder": "number"
+	          }
+	        },
+	        {
+	          "type": "input",
+	          "classList": [
+	            "input"
+	          ],
+	          "events": {
+	            "input": "oninput"
+	          },
+	          "attr": {
+	            "type": "email",
+	            "name": "email",
+	            "value": "",
+	            "placeholder": "email"
+	          }
+	        },
+	        {
+	          "type": "input",
+	          "classList": [
+	            "input"
+	          ],
+	          "events": {
+	            "input": "oninput"
+	          },
+	          "attr": {
+	            "type": "tel",
+	            "name": "tel",
+	            "value": "",
+	            "placeholder": "tel"
+	          }
+	        },
+	        {
+	          "type": "input",
+	          "classList": [
+	            "input"
+	          ],
+	          "events": {
+	            "input": "oninput"
+	          },
+	          "attr": {
+	            "type": "url",
+	            "name": "url",
+	            "value": "",
+	            "placeholder": "url"
+	          }
+	        },
+	        {
+	          "type": "input",
+	          "classList": [
+	            "input"
+	          ],
+	          "events": {
+	            "input": "oninput"
+	          },
+	          "attr": {
+	            "type": "text",
+	            "name": "required",
+	            "value": "",
+	            "required": "",
+	            "placeholder": "required"
+	          }
+	        },
+	        {
+	          "type": "input",
+	          "classList": [
+	            "input"
+	          ],
+	          "events": {
+	            "input": "oninput"
+	          },
+	          "attr": {
+	            "name": "minlength",
+	            "value": "",
+	            "minlength": "5",
+	            "placeholder": "minlength"
+	          }
+	        },
+	        {
+	          "type": "input",
+	          "classList": [
+	            "input"
+	          ],
+	          "events": {
+	            "input": "oninput"
+	          },
+	          "attr": {
+	            "name": "maxlength",
+	            "value": "",
+	            "maxlength": "5",
+	            "placeholder": "maxlength"
+	          }
+	        },
+	        {
+	          "type": "input",
+	          "classList": [
+	            "input"
+	          ],
+	          "events": {
+	            "input": "oninput"
+	          },
+	          "attr": {
+	            "name": "pattern",
+	            "value": "",
+	            "pattern": "abc",
+	            "placeholder": "pattern"
+	          }
+	        },
+	        {
+	          "type": "input",
+	          "classList": [
+	            "input"
+	          ],
+	          "events": {
+	            "input": "oninput"
+	          },
+	          "attr": {
+	            "name": "msg",
+	            "required": "",
+	            "minlength": "6",
+	            "msg": "{\"required\": \"亲，您还没写哦\", \"minlength\": \"写得太短了吧~\"}",
+	            "placeholder": "msg"
+	          }
+	        },
+	        {
+	          "type": "text",
+	          "classList": [
+	            "btn"
+	          ],
+	          "id": "submit",
+	          "events": {
+	            "click": "submit3"
 	          },
 	          "attr": {
 	            "value": "submit"
@@ -1855,6 +2084,7 @@
 	    console.log('index.we created');
 	  },
 	  methods: {
+	    oninput: function oninput(e) {},
 	    submit1: function submit1() {
 
 	      var that = this;
@@ -1881,10 +2111,151 @@
 	        console.log(response);
 	        that.response = (0, _stringify2.default)(response, null, 2);;
 	      });
+	    },
+	    submit3: function submit3() {
+	      var that = this,
+	          form = this.$vm('form3');
+
+	      form.toast = function (msg) {
+	        alert(msg);
+	      };
+
+	      this.$vm('form3').submit(function (response) {
+	        console.log(response);
+	        that.response = (0, _stringify2.default)(response, null, 2);;
+	      });
 	    }
 	  }
 	};}
 	/* generated by weex-loader */
+
+
+/***/ },
+/* 78 */,
+/* 79 */
+/***/ function(module, exports) {
+
+	
+	var validator = {
+
+	  // Form validation: type=[email,number,cellphone]
+	  type: function(ele, msg) {
+
+	    var value = ele.attr.value;
+
+	    // @see https://github.com/jzaefferer/jquery-validation/blob/master/src/core.js
+	    switch (ele.attr.type) {
+	      case undefined:
+	        return "";
+	      case "hidden":
+	        return "";
+	      case "submit":
+	        return "";
+	      case "email":
+	        return /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(value) ? "" : msg.email;
+	      case "number":
+	        return /^(?:-?\d+|-?\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/.test(value) ? "" : msg.number;
+	      case "cellphone":
+	      case "tel":
+	      case "phone":
+	        return /^[1][3,4,5,7,8][0-9]{9}$/.test(value) ? "" : msg.cellphone;
+	      case "integer":
+	        return /^\d+$/.test(value) ? "" : msg.integer;
+	      case "url":
+	        return /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(value) ? "" : msg.url;
+	      case 'date':
+	        return isNaN(new Date(value).getTime()) ? msg.date : '';
+	      default:
+	        return "";
+	    }
+
+	  },
+	  // Form validation: required.
+	  required: function(ele, msg) {
+	    if (ele.attr.required !== undefined && !ele.attr.value)
+	      return msg.required;
+	    return "";
+	  },
+	  // Form validation: pattern.
+	  pattern: function(ele, msg) {
+	    if (!ele.attr.pattern)
+	      return "";
+	    var reg = new RegExp(ele.attr.pattern);
+	    return reg.test(ele.attr.value) ? "" : msg.pattern;
+	  },
+	  minlength: function(ele, msg) {
+	    var l = ele.attr.minlength;
+	    if (!l)
+	      return "";
+	    l = +l;
+	    if (ele.attr.value.length >= l) {
+	      return "";
+	    } else {
+	      return msg.minlength.replace("{1}", l);
+	    }
+	  },
+	  maxlength: function(ele, msg) {
+	    var l = ele.attr.maxlength;
+	    if (!l)
+	      return "";
+	    l = +l;
+	    if (ele.attr.value.length <= l) {
+	      return "";
+	    } else {
+	      return msg.maxlength.replace("{1}", l)
+	    }
+	  },
+	  defaultMsg: {
+	    email: "邮箱地址错误",
+	    number: "数字格式错误",
+	    cellphone: "手机号错误",
+	    integer: "请输入整数",
+	    url: "请输入正确的网址",
+	    date: "日期错误",
+	    required: "必须填写",
+	    pattern: "请输入正确的值",
+	    fun: "请输入正确的值",
+	    minlength: "最小长度为{1}",
+	    maxlength: "最大长度为{1}"
+	  }
+	}
+
+	var validIt = function(input) {
+	  var inputmsg = JSON.parse(input.attr.msg || "{}")
+	    , key
+	    , msg = {}
+	    , returnMsg;
+
+	  for (key in validator.defaultMsg) {
+	    msg[key] = validator.defaultMsg[key];
+	  }
+	  for (key in inputmsg) {
+	    msg[key] = inputmsg[key];
+	  }
+
+	  returnMsg =
+	    // check type
+	    validator.type(input, msg) ||
+
+	    // check required
+	    validator.required(input, msg) ||
+
+	    // check pattern
+	    validator.pattern(input, msg) ||
+
+	    // check custom function
+	    validator.minlength(input, msg) ||
+
+	    // check custom function
+	    validator.maxlength(input, msg);
+
+	  return returnMsg;
+
+	}
+
+	module.exports = {
+	  validIt: validIt
+	}
 
 
 /***/ }
