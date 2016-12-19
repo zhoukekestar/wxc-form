@@ -2,9 +2,9 @@ require('webpack');
 require('weex-loader');
 
 var path = require('path');
-var fs=require('fs')
+var fs = require('fs')
 
-var entry={};
+var entry = {};
 function walk(dir, root) {
   var directory = path.join(__dirname, root, dir)
   fs.readdirSync(directory)
@@ -14,7 +14,7 @@ function walk(dir, root) {
 
         if (stat.isFile() &&
             path.extname(fullpath) === '.we') {
-          var name = path.join( dir, path.basename(file, '.we'))
+          var name = path.join(dir, path.basename(file, '.we'))
           entry[name] = fullpath + '?entry=true'
         } else if (stat.isDirectory()) {
           var subdir = path.join(dir, file)
