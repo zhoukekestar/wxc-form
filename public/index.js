@@ -194,47 +194,45 @@
 	  return obj;
 	};
 
-	var getAllInputs = function () {
+	var inputs = [];
+	var getAllInputs = function getAllInputs(node, novalidate, deep) {
 
-	  var inputs = [];
+	  inputs = deep === undefined ? [] : inputs;
 
-	  return function (node, novalidate, deep) {
+	  var children = node.children;
+	  for (var i = 0; i < children.length; i++) {
 
-	    inputs = deep === undefined ? [] : inputs;
+	    var attr = children[i].attr || {},
+	        element = children[i],
+	        type = attr.type,
+	        name = attr.name,
+	        value = attr.value;
 
-	    var children = node.children;
-	    for (var i = 0; i < children.length; i++) {
+	    if (element.type === 'input' || element.type === 'select' || element.type === 'textarea') {
 
-	      var attr = children[i].attr || {},
-	          element = children[i],
-	          type = attr.type,
-	          name = attr.name,
-	          value = attr.value;
+	      if (name && !element.disabled && type !== 'submit' && type !== 'button' && type !== 'file' && (type !== 'radio' && type !== 'checkbox' || element.checked)) {
 
-	      if (element.type === 'input' || element.type === 'select' || element.type === 'textarea') {
+	        if (novalidate === false) {
 
-	        if (name && !element.disabled && type !== 'submit' && type !== 'button' && type !== 'file' && (type !== 'radio' && type !== 'checkbox' || element.checked)) {
-
-	          if (novalidate === false) {
-
-	            var msg = validator.validIt(children[i]);
-	            if (msg) {
-	              return msg;
-	            }
+	          var msg = validator.validIt(children[i]);
+	          if (msg) {
+	            inputs = msg;
+	            return inputs;
 	          }
-
-	          inputs.push({
-	            name: name,
-	            value: value
-	          });
 	        }
-	      } else if (node.children.length > 0) {
-	        getAllInputs(node.children[i], novalidate, true);
+
+	        inputs.push({
+	          name: name,
+	          value: value
+	        });
 	      }
+	    } else if (node.children.length > 0) {
+	      getAllInputs(node.children[i], novalidate, true);
+	      if (typeof inputs === 'string') return inputs;
 	    }
-	    return inputs;
-	  };
-	}();
+	  }
+	  return inputs;
+	};
 
 	var toJsonObject = function toJsonObject(list, res) {
 
