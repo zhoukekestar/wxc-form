@@ -1654,7 +1654,10 @@
 	  // Form validation: type=[email,number,cellphone]
 	  type: function(ele, msg) {
 
-	    var value = ele.attr.value;
+	    var value = ele.attr.value || "";
+
+	    // if value is empty, it depends on input is required or not.
+	    if (value === "") return "";
 
 	    // @see https://github.com/jzaefferer/jquery-validation/blob/master/src/core.js
 	    switch (ele.attr.type) {
