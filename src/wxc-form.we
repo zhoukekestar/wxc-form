@@ -223,18 +223,31 @@
         modal.toast({message: msg, duration: 1});
       },
       headers: function() {
-        return {};
+
+        if (this.method === 'GET') {
+          return {};
+        } else {
+          return {
+            'Content-Type': 'application/json'
+          }
+        }
+
       },
-      submit: function(callback, filter) {
+      submit: function(callback, filter, progressCallback) {
 
         var res = {}
-          , inputs;
+          , inputs
+
+        callback = callback || function() {};
+        progressCallback = progressCallback || function() {};
 
         inputs = getAllInputs(this._rootEl, this.novalidate);
+        // If inputs is a string, it means an invalid message for inputs.
         if (typeof inputs === 'string') {
           this.toast(inputs)
           return;
         }
+
         toJsonObject(inputs, res);
         integerKeysAsArrayIndexes(res);
 
@@ -244,26 +257,25 @@
 
         // GET
         if (this.method.toUpperCase() === 'GET') {
+
           stream.fetch({
             method: 'GET',
-            url: /\?/.test(this.action) ? this.action + '&' + serialize(res) : this.action + '?' + serialize(res),
+            url: this.action + (/\?/.test(this.action) ? '&' : '?' ) + serialize(res),
             type: 'json',
             headers: typeof this.headers === 'object' ? this.headers : this.headers()
-          }, function(response) {
-            callback && callback(response);
-          })
+          }, callback, progressCallback)
 
         // Others
         } else {
+
           stream.fetch({
             method: this.method,
             url: this.action,
             type:'json',
             headers: typeof this.headers === 'object' ? this.headers : this.headers(),
             body: JSON.stringify(res)
-          }, function(response) {
-            callback && callback(response)
-          });
+          }, callback, progressCallback)
+
         }
       }
     }

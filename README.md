@@ -7,11 +7,13 @@ Weex Component Form.
 * `novalidate` Disable the validator that can validate input value is valid or not.
 
 # Methods
-* `submit(callback, [filter])`
+* `submit(callback, [filter], [progressCallback])`
 
   Function `callback` will pass a parameter `response`.
 
   Function `filter` is optional which can modify the body sent to server, if you return `null`, the current request will be canceled.
+
+  Function `progressCallback` is optional.
 
 * `headers()` `function` OR `object`. Function return object will set to current request headers.
 * `toast()` Show message function. Default: `modal.toast(msg)`.

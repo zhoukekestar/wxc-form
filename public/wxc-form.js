@@ -278,18 +278,30 @@
 	      modal.toast({ message: msg, duration: 1 });
 	    },
 	    headers: function headers() {
-	      return {};
+
+	      if (this.method === 'GET') {
+	        return {};
+	      } else {
+	        return {
+	          'Content-Type': 'application/json'
+	        };
+	      }
 	    },
-	    submit: function submit(callback, filter) {
+	    submit: function submit(callback, filter, progressCallback) {
 
 	      var res = {},
 	          inputs;
 
+	      callback = callback || function () {};
+	      progressCallback = progressCallback || function () {};
+
 	      inputs = getAllInputs(this._rootEl, this.novalidate);
+
 	      if (typeof inputs === 'string') {
 	        this.toast(inputs);
 	        return;
 	      }
+
 	      toJsonObject(inputs, res);
 	      integerKeysAsArrayIndexes(res);
 
@@ -298,24 +310,22 @@
 	      if (res === null) return;
 
 	      if (this.method.toUpperCase() === 'GET') {
+
 	        stream.fetch({
 	          method: 'GET',
-	          url: /\?/.test(this.action) ? this.action + '&' + serialize(res) : this.action + '?' + serialize(res),
+	          url: this.action + (/\?/.test(this.action) ? '&' : '?') + serialize(res),
 	          type: 'json',
 	          headers: (0, _typeof3.default)(this.headers) === 'object' ? this.headers : this.headers()
-	        }, function (response) {
-	          callback && callback(response);
-	        });
+	        }, callback, progressCallback);
 	      } else {
+
 	        stream.fetch({
 	          method: this.method,
 	          url: this.action,
 	          type: 'json',
 	          headers: (0, _typeof3.default)(this.headers) === 'object' ? this.headers : this.headers(),
 	          body: (0, _stringify2.default)(res)
-	        }, function (response) {
-	          callback && callback(response);
-	        });
+	        }, callback, progressCallback);
 	      }
 	    }
 	  }
