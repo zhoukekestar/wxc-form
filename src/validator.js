@@ -51,7 +51,7 @@ var validator = {
   },
   minlength: function(ele, msg) {
     var l = ele.attr.minlength;
-    if (!l)
+    if (!l || !ele.attr.value)
       return "";
     l = +l;
     if (ele.attr.value.length >= l) {
@@ -62,7 +62,7 @@ var validator = {
   },
   maxlength: function(ele, msg) {
     var l = ele.attr.maxlength;
-    if (!l)
+    if (!l || !ele.attr.value)
       return "";
     l = +l;
     if (ele.attr.value.length <= l) {
